@@ -21,7 +21,7 @@ public class ColorManager {
         private Color[] createColors() {
             Color[] colors = new Color[nrColors];
             for (int i = 0; i < colors.length; i++) {
-                colors[i] = newColor();
+                colors[i] = new Color();
             }
             return colors;
         }
