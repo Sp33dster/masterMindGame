@@ -11,7 +11,7 @@ public class GeneralGuesser extends Guesser {
      * This version just sets all colors to be the first color, since in this guesser
      * position do not need to be unique.
      */
-    
+
     @Override
     protected void setFirstGuess(){
         int i = 0;
