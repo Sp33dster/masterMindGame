@@ -19,7 +19,7 @@ public abstract class Guesser {
      *
      * @return the next guess
      */
-    
+
     protected Color[] nextGuess(){
         if (lastGuess[0] == null){
             setFirstGuess();
