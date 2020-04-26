@@ -21,12 +21,16 @@ public class Game {
         final int colorMatch = secretRow.nrMatchingColors(row.positions);
         row.setMatch(positionMatch, colorMatch);
         table.addRow(row);
-        if (positionMatch == nrOfColumns){
+        if (itWasAWinningMatch(positionMatch)){
             finished = true;
         }
     }
 
     public boolean isFinished() {
         return finished;
+    }
+
+    private boolean itWasAWinningMatch (int positionMatch){
+        return positionMatch == nrOfColumns;
     }
 }

@@ -21,7 +21,7 @@ public class UniqueGuesser extends Guesser {
         int i = lastGuess.length - 1;
         for (var color = table.manager.firstColor();
         i >=0;
-        color = table.manager.firstColor()){
+        color = table.manager.nextColor(color)){
             lastGuess[i--] = color;
         }
     }
