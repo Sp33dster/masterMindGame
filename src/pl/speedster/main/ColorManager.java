@@ -37,7 +37,7 @@ public class ColorManager {
         return first;
     }
 
-    boolean thereIsNextColor(Color color) {
+    public boolean thereIsNextColor(Color color) {
         return successor.containsKey(color);
     }
 

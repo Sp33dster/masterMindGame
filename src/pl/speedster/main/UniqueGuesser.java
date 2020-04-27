@@ -43,7 +43,7 @@ public class UniqueGuesser extends Guesser {
     }
 
     @Override
-    protected Color[] nextGuess(){
+    public Color[] nextGuess(){
         Color[] guess = super.nextGuess();
         while (isNotUnigue(guess)){
             guess = super.nextGuess();
