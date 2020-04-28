@@ -1,4 +1,4 @@
-package test.unit;
+package pl.speedster.masterMind.unit;
 
 import org.junit.Assert;
 import org.junit.Test;

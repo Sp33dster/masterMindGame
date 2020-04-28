@@ -1,4 +1,4 @@
-package test.unit;
+package pl.speedster.masterMind.unit;
 
 import org.junit.Test;
 import org.junit.Assert;
@@ -9,25 +9,26 @@ class ColorManagerTest {
 
     private static final int NR_COLORS = 6;
 
+    //START SNIPPET thereIsAFirstColor_ch05
     @Test
-    public void thereIsAFirstColor(){
-        ColorManager manager = new ColorManager(NR_COLORS);
-        System.out.println(manager.firstColor());
+    public void thereIsAFirstColor() {
+        var manager = new ColorManager(NR_COLORS, Color::new);
         Assert.assertNotNull(manager.firstColor());
     }
+    //END SNIPPET
 
     @Test
     public void noNextColorIsNullWhenThereIsOne() {
-        ColorManager manager = new ColorManager(NR_COLORS);
-        Color color = manager.firstColor();
+        var manager = new ColorManager(NR_COLORS, Color::new);
+        var color = manager.firstColor();
         while (manager.thereIsNextColor(color)) {
             Assert.assertNotNull(color = manager.nextColor(color));
         }
     }
 
     @Test
-    public void noColorHasNoNextColor(){
-        ColorManager manager = new ColorManager(NR_COLORS);
+    public void noColorHasNoNextColor() {
+        var manager = new ColorManager(NR_COLORS, Color::new);
         Assert.assertNull(manager.nextColor(Color.none));
     }
 }

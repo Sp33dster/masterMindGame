@@ -1,4 +1,4 @@
-package test.integration;
+package pl.speedster.masterMind.integration;
 
 import org.junit.jupiter.api.Test;
 import org.testng.Assert;
