@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public class Guess {
+
     public final static Guess none = new Guess(new Color[0]);
     private final Color[] colors;
     private boolean uniquenessWasNotCalculated = true;
@@ -13,6 +14,7 @@ public class Guess {
         this.colors = Arrays.copyOf(colors, colors.length);
     }
 
+
     public Color getColor(int i) {
         return colors[i];
     }
@@ -20,6 +22,7 @@ public class Guess {
     public int nrOfColumns() {
         return colors.length;
     }
+
 
     /**
      * Calculate the next guess and return a new Guess object.
@@ -74,7 +77,7 @@ public class Guess {
      * @param guess is the actual guess that we evaluate
      * @return the number of good colors not in pos
      */
-
+//START SNIPPET Guess_ch05_nrOfPartialMatches
     public int nrOfPartialMatches(Guess guess) {
         assertCompatibility(guess);
         int count = 0;

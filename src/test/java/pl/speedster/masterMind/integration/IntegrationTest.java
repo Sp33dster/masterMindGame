@@ -1,46 +1,47 @@
 package pl.speedster.masterMind.integration;
 
-import org.junit.jupiter.api.Test;
-import org.testng.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 import pl.speedster.main.*;
 import pl.speedster.main.PrettyPrintRow;
+import pl.speedster.main.lettered.LetteredColorFactory;
 
 public class IntegrationTest {
-    final int nrColors = 6;
-    final int nrColumns = 4;
-    final ColorManager manager = new ColorManager(nrColors);
+    private static final int NR_COLORS = 10;
+    final ColorManager manager = new ColorManager(NR_COLORS, new LetteredColorFactory());
+    private static final int NR_COLUMNS = 6;
 
-    private Color[] createSecret() {
-        Color[] secret = new Color[nrColumns];
+    private Guess createSecret() {
+        Color[] colors = new Color[NR_COLUMNS];
         int count = 0;
         Color color = manager.firstColor();
-        while (count < nrColors - nrColumns) {
+        while (count < NR_COLORS - NR_COLUMNS) {
             color = manager.nextColor(color);
             count++;
         }
-        for (int i = 0; i < nrColumns; i++) {
-            secret[i] = color;
+        for (int i = 0; i < NR_COLUMNS; i++) {
+            colors[i] = color;
             color = manager.nextColor(color);
         }
-        return secret;
+        return new Guess(colors);
     }
 
     @Test
     public void testSimpleGame() {
-        Table table = new Table(nrColumns, manager);
-        Color[] secret = createSecret();
-        System.out.println(PrettyPrintRow.pprint(new Row(secret)));
+        Table table = new Table(NR_COLUMNS, manager);
+        Guess secret = createSecret();
+        System.out.println(PrettyPrintRow.pprint(new Row(secret, 4, 0)));
         System.out.println();
         Game game = new Game(table, secret);
 
         Guesser guesser = new UniqueGuesser(table);
         while (!game.isFinished()) {
-            Row guess = guesser.guess();
-            if (guess == Row.none) {
+            Guess guess = guesser.guess();
+            if (guess == Guess.none) {
                 Assert.fail();
             }
-            game.addNewGuess(guess);
-            System.out.println(PrettyPrintRow.pprint(guess));
+            Row row = game.addNewGuess(guess);
+            System.out.println(PrettyPrintRow.pprint(row));
         }
     }
 }

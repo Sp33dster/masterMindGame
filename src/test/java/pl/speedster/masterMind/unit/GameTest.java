@@ -2,34 +2,37 @@ package pl.speedster.masterMind.unit;
 
 import org.junit.Test;
 import pl.speedster.main.*;
+import pl.speedster.main.lettered.LetteredColorFactory;
 
 public class GameTest {
+    private static final int NR_COLORS = 6;
+    private static final int NR_COLUMNS = 4;
     private Game game;
-    private Color[] secret;
-    private void createTestGame(){
-        final int nrColors = 6;
-        ColorManager manager = new ColorManager(nrColors);
-        final int nrColumns = 4;
-        Table table = new Table(nrColumns, manager);
-        secret = new Color[nrColumns];
-        Color color = manager.firstColor();
-        for (int i = 0; i < nrColumns; i++) {
-            secret[i] = color;
+    private Guess secret;
+
+    private void createTestGame() {
+        final var manager = new ColorManager(NR_COLORS, new LetteredColorFactory());
+        final var table = new Table(NR_COLUMNS, manager);
+        final var colors = new Color[NR_COLUMNS];
+        var color = manager.firstColor();
+        for (int i = 0; i < NR_COLUMNS; i++) {
+            colors[i] = color;
             color = manager.nextColor(color);
         }
+        secret = new Guess(colors);
         game = new Game(table, secret);
     }
 
     @Test
     public void canAddNewGuess() {
         createTestGame();
-        game.addNewGuess(new Row(secret));
+        game.addNewGuess(secret);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwsExceptionForFinishedGame() {
         createTestGame();
-        game.addNewGuess(new Row(secret));
-        game.addNewGuess(new Row(secret));
+        game.addNewGuess(secret);
+        game.addNewGuess(secret);
     }
 }

@@ -2,17 +2,17 @@ package pl.speedster.main;
 
 public abstract class Guesser {
     protected final Table table;
-    private final ColorManager manager;
-    protected final Color[] lastGuess;
-    public static final Color[] none = new Color[]{Color.none};
+    final ColorManager manager;
 
     public Guesser(Table table){
         this.table = table;
-        this.lastGuess = new Color[table.nrColumns];
         this.manager = table.manager;
+        nextGuess = firstGuess();
     }
 
-    abstract protected void setFirstGuess();
+    abstract protected Guess firstGuess();
+
+    protected Guess nextGuess;
 
     /**
      * get the next guess, without checking any matching
@@ -20,51 +20,29 @@ public abstract class Guesser {
      * @return the next guess
      */
 
-    public Color[] nextGuess(){
-        if (lastGuess[0] == null){
-            setFirstGuess();
-            return lastGuess;
-        }   else    {
-            return nextNonFirstGuess();
-        }
+    public Guess nextGuess(){
+        var currentGuess = nextGuess;
+        nextGuess = currentGuess.nextGuess(manager);
+        return currentGuess;
     }
 
-    private Color[] nextNonFirstGuess(){
-        int i = 0;
-        boolean guessFound = false;
-        while (i < table.nrColumns && !guessFound){
-            if (manager.thereIsNextColor(lastGuess[i])){
-                lastGuess[i] = manager.nextColor(lastGuess[i]);
-                guessFound = true;
-            }   else    {
-                lastGuess[i] = manager.firstColor();
-                i++;
-            }
-        }
-        if (guessFound){
-            return lastGuess;
-        }   else    {
-            return none;
-        }
-    }
-
-    /**
+     /**
      * A guess matches if all rows in the table matches the guess.
      *
      * @param guess to match against the rows
      * @return true if all rows match
      */
 
-    private boolean guessMatch(Color[] guess){
-        for (Row row : table.rows){
-            if (!row.guessMatches(guess)){
+    private boolean guessMatch(Guess guess){
+        for (final var row : table.rows){
+            if (!row.matches(guess)){
                 return false;
             }
         }
         return true;
     }
 
-    private boolean guessDoesNotMatch(Color[] guess){
+    private boolean guessDoesNotMatch(Guess guess){
         return !guessMatch(guess);
     }
 
@@ -75,15 +53,11 @@ public abstract class Guesser {
      * @return the new Row to be added to the table along with the feedback afterwards.
      */
 
-    public Row guess(){
-        Color[] guess = nextGuess();
-        while (guess != none && guessDoesNotMatch(guess)){
+    public Guess guess() {
+        var guess = nextGuess();
+        while (guess != Guess.none && guessDoesNotMatch(guess)) {
             guess = nextGuess();
         }
-        if (guess == none){
-            return Row.none;
-        }   else    {
-            return new Row(guess);
-        }
+        return guess;
     }
 }

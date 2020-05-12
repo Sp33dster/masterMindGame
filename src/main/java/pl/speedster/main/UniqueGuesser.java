@@ -8,44 +8,26 @@ import java.util.HashSet;
 
 public class UniqueGuesser extends Guesser {
 
-    public UniqueGuesser(Table table){
+    public UniqueGuesser(Table table) {
         super(table);
     }
 
-    /**
-     * Set the first possible guess. This method is used during the construction process.
-     */
-
     @Override
-    protected void setFirstGuess(){
-        int i = lastGuess.length - 1;
-        for (var color = table.manager.firstColor();
-        i >=0;
-        color = table.manager.nextColor(color)){
-            lastGuess[i--] = color;
+    protected Guess firstGuess() {
+        final var colors = new Color[table.nrOfColumns()];
+        int i = colors.length - 1;
+        for (var color = manager.firstColor();
+             i >= 0;
+             color = manager.nextColor(color)) {
+            colors[i--] = color;
         }
-    }
-
-    /**
-     * @param guess that we check for containing one color only once
-     * @return true if the guess does not contain any color more than once
-     */
-
-    private boolean isNotUnigue(Color[] guess){
-        final var alreadyPresent = new HashSet<Color>();
-        for (final var color : guess){
-            if (alreadyPresent.contains(color)){
-                return true;
-            }
-            alreadyPresent.add(color);
-        }
-        return false;
+        return new Guess(colors);
     }
 
     @Override
-    public Color[] nextGuess(){
-        Color[] guess = super.nextGuess();
-        while (isNotUnigue(guess)){
+    public Guess nextGuess() {
+        var guess = super.nextGuess();
+        while (!guess.isUnique()) {
             guess = super.nextGuess();
         }
         return guess;

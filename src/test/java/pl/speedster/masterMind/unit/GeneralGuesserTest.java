@@ -2,10 +2,7 @@ package pl.speedster.masterMind.unit;
 
 import org.junit.Assert;
 import org.junit.Test;
-import pl.speedster.main.ColorManager;
-import pl.speedster.main.GeneralGuesser;
-import pl.speedster.main.Guesser;
-import pl.speedster.main.Table;
+import pl.speedster.main.*;
 
 public class GeneralGuesserTest {
     static final int NR_COLORS = 6;
@@ -14,12 +11,12 @@ public class GeneralGuesserTest {
     @Test
     public void generateAllGuesses() {
         int numberOfGuesses = 0;
-        ColorManager manager = new ColorManager(NR_COLORS);
-        Table table = new Table(NR_COLUMNS,manager);
-        Guesser guesser = new GeneralGuesser(table);
-        while (guesser.nextGuess() != Guesser.none) {
+        final var manager = new ColorManager(NR_COLORS, Color::new);
+        final var table = new Table(NR_COLUMNS, manager);
+        final var guesser = new GeneralGuesser(table);
+        while (guesser.nextGuess() != Guess.none) {
             numberOfGuesses++;
         }
-        Assert.assertEquals(6*6*6*6,numberOfGuesses);
+        Assert.assertEquals(6 * 6 * 6 * 6, numberOfGuesses);
     }
 }
